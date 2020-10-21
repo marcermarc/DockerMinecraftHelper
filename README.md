@@ -1,4 +1,4 @@
-#WIP
+# WIP
 **This project isn't ready now.**
 
 -----
@@ -6,14 +6,14 @@ Helper Tool for Minecraft Docker Images
 
 The tool allows different options.
 
-##Start-parameter
+## Start-parameter
 There are multiple startparameter:
 - download: Download and if necessary build or install the specified version.
 - start: Start the specified version.
 
 It is allowed to use both arguments to download and start the game.
 
-##Environment variables
+## Environment variables
 This tool is for docker-images. So the most parameters will be set via environment variables:
 - WORKDIR: set the working directory from the game. Default: '/mnt/minecraft'
 - MCDIR: set the directory containing the executable. Default: '/opt/minecraft'
