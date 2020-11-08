@@ -1,6 +1,7 @@
 package de.marcermarc.mchelper.download.fabric;
 
 import de.marcermarc.mchelper.Controller;
+import de.marcermarc.mchelper.Type;
 import de.marcermarc.mchelper.Util;
 import de.marcermarc.mchelper.download.BaseDownload;
 
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class Download extends BaseDownload {
     private static final String FABRIC_INSTALLER_URL = "https://jenkins.modmuss50.me/job/FabricMC/job/fabric-installer/job/master/lastSuccessfulBuild/artifact/build/libs/fabric*.jar/*zip*/fabric-installer.zip";
     private static final String FABRIC_INSTALLER_FILENAME = "fabric-installer.jar";
-    private static final String FABRIC_RESULT_FILENAME = "fabric-server-launch.jar";
+    private static final String FABRIC_RESULT_FILENAME = Type.FABRIC.getDefaultMcExec();
 
     public Download(Controller controller) {
         super(controller);

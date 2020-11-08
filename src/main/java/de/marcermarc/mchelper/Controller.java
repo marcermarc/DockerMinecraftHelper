@@ -1,5 +1,6 @@
 package de.marcermarc.mchelper;
 
+import de.marcermarc.mchelper.run.InputHandler;
 import de.marcermarc.mchelper.run.Restarter;
 import de.marcermarc.mchelper.run.Runner;
 import de.marcermarc.mchelper.run.ShutdownHook;
@@ -13,6 +14,7 @@ public class Controller {
     private Runner runner;
     private Restarter restarter;
     private ShutdownHook shutdownHook;
+    private InputHandler inputHandler;
 
     public Configuration getConfig() {
         return config;
@@ -48,5 +50,13 @@ public class Controller {
 
     public void setShutdownHook(ShutdownHook shutdownHook) {
         this.shutdownHook = shutdownHook;
+    }
+
+    public InputHandler getInputHandler() {
+        return inputHandler;
+    }
+
+    public void setInputHandler(InputHandler inputHandler) {
+        this.inputHandler = inputHandler;
     }
 }

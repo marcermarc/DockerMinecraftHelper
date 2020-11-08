@@ -97,4 +97,11 @@ public class Runner {
         }
     }
 
+    public void sendCommand(String command) throws IOException {
+        if (outputStream != null) {
+            outputStream.write(command.getBytes()); // The byte-array represents "stop" and a return char
+            outputStream.write("\n".getBytes());
+            outputStream.flush(); // write the buffer to the process
+        }
+    }
 }

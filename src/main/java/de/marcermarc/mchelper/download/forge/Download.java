@@ -21,6 +21,7 @@ public class Download extends BaseDownload {
     private static final Path FORGE_RESULT_PATH = Paths.get(TEMP_PATH, "result");
     private static final String FILE_START = "forge-";
     private static final String FILE_END = ".jar";
+    private static final String LIBRARIES_FOLDER = "libraries";
 
     public Download(Controller controller) {
         super(controller);
@@ -55,6 +56,9 @@ public class Download extends BaseDownload {
         }
 
         Files.move(files[0].toPath(), Paths.get(controller.getConfig().getMcDir(), controller.getConfig().getMcExec()));
+
+        // Move Forge libraries
+        Files.move(Paths.get(FORGE_RESULT_PATH.toString(), LIBRARIES_FOLDER), Paths.get(controller.getConfig().getMcDir(), LIBRARIES_FOLDER));
     }
 
     private String getVersion() throws Exception {
@@ -66,7 +70,7 @@ public class Download extends BaseDownload {
         if (version == null) {
             Iterator<String> iterator = forgeMetaJson.keys();
             for (String v = iterator.next(); iterator.hasNext(); v = iterator.next()) {
-                if (version == null || Util.compareVersions(v, version, ".") > 0) {
+                if (version == null || Util.compareVersions(v, version, "\\.") > 0) {
                     version = v;
                 }
             }
@@ -76,15 +80,15 @@ public class Download extends BaseDownload {
 
         String subversion = controller.getConfig().getSubversion();
         if (subversion == null) {
-            for (int i = 0; i <= subversions.length(); i++) {
+            for (int i = 0; i < subversions.length(); i++) {
                 String v = subversions.getString(i);
 
-                if (subversion == null || Util.compareVersions(v, subversion, ".|-") > 0) {
+                if (subversion == null || Util.compareVersions(v, subversion, "\\.|-") > 0) {
                     subversion = v;
                 }
             }
         } else {
-            for (int i = 0; i <= subversions.length(); i++) {
+            for (int i = 0; i < subversions.length(); i++) {
                 String v = subversions.getString(i);
 
                 if (v.contains(subversion)) {
@@ -99,6 +103,6 @@ public class Download extends BaseDownload {
 
     @Override
     protected String[] getBuildDependencies() {
-        return new String[0];
+        return null;
     }
 }

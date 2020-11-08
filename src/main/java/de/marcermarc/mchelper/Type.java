@@ -1,11 +1,12 @@
 package de.marcermarc.mchelper;
 
 import de.marcermarc.mchelper.download.BaseDownload;
+import de.marcermarc.mchelper.run.BeforeStart;
 
 public enum Type {
     BUKKIT("bukkit.jar"),
     CRAFTBUKKIT("craftbukkit.jar"),
-    FABRIC("fabric-server-launch.jar.jar"),
+    FABRIC("fabric-server-launch.jar"),
     FORGE("forge-server.jar"),
     PAPER("paper.jar"),
     SPIGOT("spigot.jar"),
@@ -39,5 +40,14 @@ public enum Type {
                 return new de.marcermarc.mchelper.download.vanilla.Download(controller);
         }
         return null;
+    }
+
+    public BeforeStart getBeforeStart(Controller controller) {
+        switch (this) {
+            case FABRIC:
+                return new de.marcermarc.mchelper.run.fabric.BeforeStart(controller);
+
+        }
+        return new BeforeStart(controller);
     }
 }

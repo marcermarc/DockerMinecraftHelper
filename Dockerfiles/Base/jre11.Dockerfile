@@ -2,10 +2,11 @@ FROM alpine:latest AS builder
 
 WORKDIR /opt
 
-COPY * ./
+COPY pom.xml ./
+COPY src ./src/
 
 RUN apk add --update --no-cache openjdk11 maven --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community \
- && mvn clean package
+ && mvn compile package
 
 
 FROM alpine:latest

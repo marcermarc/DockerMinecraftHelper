@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Comparator;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
@@ -65,7 +66,11 @@ public class Util {
                 entry = zipInputStream.getNextEntry();
             } while (entry.isDirectory());
 
-            try (FileChannel fileChannel = FileChannel.open(destination)) {
+            if (!Files.exists(destination.getParent())) {
+                Files.createDirectory(destination.getParent());
+            }
+
+            try (FileChannel fileChannel = FileChannel.open(destination, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
                 fileChannel.transferFrom(Channels.newChannel(zipInputStream), 0, Long.MAX_VALUE);
             }
         }
@@ -76,6 +81,10 @@ public class Util {
      * source: https://softwarecave.org/2018/03/24/delete-directory-with-contents-in-java/#:~:text=Removing%20empty%20directory%20in%20Java,will%20refuse%20to%20remove%20it.
      */
     public static void deleteDirectory(Path path) throws IOException {
+        if (!Files.exists(path)) {
+            return;
+        }
+
         Files.walk(path)
                 .sorted(Comparator.reverseOrder())
                 .map(Path::toFile)

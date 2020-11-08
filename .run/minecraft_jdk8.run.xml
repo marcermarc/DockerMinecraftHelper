@@ -7,7 +7,7 @@
                 <option name="buildCliOptions" value=""/>
                 <option name="buildOnly" value="true"/>
                 <option name="command" value=""/>
-                <option name="containerName" value=""/>
+                <option name="containerName" value="mc_jdk8"/>
                 <option name="contextFolderPath" value="."/>
                 <option name="entrypoint" value=""/>
                 <option name="commandLineOptions" value=""/>

@@ -35,10 +35,11 @@ public class Download extends BaseDownload {
 
         String versionJsonUrl = null;
         JSONArray versions = vanillaMetaJson.getJSONArray("versions");
-        for (int i = 0; i <= versions.length(); i++) {
+        for (int i = 0; i < versions.length(); i++) {
             JSONObject value = versions.getJSONObject(i);
             if (version.equals(value.getString("id"))) {
                 versionJsonUrl = value.getString("url");
+                break;
             }
         }
 

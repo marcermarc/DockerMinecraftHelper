@@ -1,8 +1,7 @@
 package de.marcermarc.mchelper;
 
-import de.marcermarc.mchelper.run.Restarter;
-import de.marcermarc.mchelper.run.Runner;
-import de.marcermarc.mchelper.run.ShutdownHook;
+import de.marcermarc.mchelper.download.BaseDownload;
+import de.marcermarc.mchelper.run.*;
 
 import java.util.Arrays;
 
@@ -15,7 +14,7 @@ public class Main {
     private Main() {
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         if (args == null || args.length < 1) {
             System.out.println("There has to be at least one a argument. The following arguments are allowed:");
             printArgInfo();
@@ -37,6 +36,8 @@ public class Main {
             System.out.println("Parameter 'start' recognized. Starting now.");
             main.start();
         }
+
+        Runtime.getRuntime().halt(0); // To stop the program at this point and no other thread will block this
     }
 
     private static void printArgInfo() {
@@ -49,19 +50,31 @@ public class Main {
         controller.getConfig().initWithEnvironment();
     }
 
-    private void download() {
-
+    private void download() throws Exception {
+        BaseDownload download = controller.getConfig().getType().getDownloader(controller);
+        download.installBuildDependencies();
+        download.start();
+        download.uninstallBuildDependencies();
     }
 
-    private void start() {
+    private void start() throws Exception {
+        BeforeStart beforeStart = controller.getConfig().getType().getBeforeStart(controller);
+        beforeStart.run();
+
         ShutdownHook hook = new ShutdownHook(controller);
         hook.start();
+
+        InputHandler input = new InputHandler(controller);
+        input.start();
 
         Restarter restarter = new Restarter(controller);
         restarter.start();
 
         Runner runner = new Runner(controller);
+        runner.init();
         runner.start();
         runner.waitForFinish();
+
+        hook.destroy();
     }
 }

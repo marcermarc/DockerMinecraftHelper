@@ -9,6 +9,10 @@
     <version>0.1-BETA</version>
     <description>Helper Tool for Minecraft Docker Images</description>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -21,6 +25,7 @@
                     <archive>
                         <manifest>
                             <mainClass>de.marcermarc.mchelper.Main</mainClass>
+                            <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
                     <finalName>McDockerHelper</finalName>
@@ -47,10 +52,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
