@@ -1,11 +1,14 @@
 package de.marcermarc.mchelper.download;
 
 import de.marcermarc.mchelper.Controller;
+import de.marcermarc.mchelper.Type;
 import de.marcermarc.mchelper.Util;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public abstract class BuildToolsBaseDownload extends BaseDownload {
@@ -30,10 +33,30 @@ public abstract class BuildToolsBaseDownload extends BaseDownload {
 
         System.out.println("Run BuildTools...");
 
-        new ProcessBuilder("java", "-jar", jarPath.toString(), "--rev", controller.getConfig().getVersion())
+        new ProcessBuilder(getInstallerCommand(jarPath.toString()))
                 .directory(TEMP_DIRECTORY)
                 .inheritIO()
                 .start()
                 .waitFor(60, TimeUnit.MINUTES);
+    }
+
+    private List<String> getInstallerCommand(final String jarPath) {
+        List<String> command = new ArrayList<>();
+        command.add("java");
+        command.add("-jar");
+        command.add(jarPath);
+
+        String version = controller.getConfig().getVersion();
+        if (version != null) {
+            command.add("--rev");
+            command.add(version);
+        }
+
+        if (controller.getConfig().getType() == Type.CRAFTBUKKIT) {
+            command.add("--compile");
+            command.add("craftbukkit");
+        }
+
+        return command;
     }
 }

@@ -4,7 +4,6 @@ import de.marcermarc.mchelper.download.BaseDownload;
 import de.marcermarc.mchelper.run.BeforeStart;
 
 public enum Type {
-    BUKKIT("bukkit.jar"),
     CRAFTBUKKIT("craftbukkit.jar"),
     FABRIC("fabric-server-launch.jar"),
     FORGE("forge-server.jar"),
@@ -24,8 +23,6 @@ public enum Type {
 
     public BaseDownload getDownloader(Controller controller) {
         switch (this) {
-            case BUKKIT:
-                return new de.marcermarc.mchelper.download.bukkit.Download(controller);
             case CRAFTBUKKIT:
                 return new de.marcermarc.mchelper.download.craftbukkit.Download(controller);
             case FABRIC:
