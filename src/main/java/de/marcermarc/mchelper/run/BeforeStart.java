@@ -28,7 +28,7 @@ public class BeforeStart {
             return; // without configure it, it should not do anything
         }
 
-        System.out.println("Eula Parameter is set. If you not agree to the minecraft eula stop this server.");
+        System.out.println("Eula environment parameter is set to true. If you not agree to the minecraft eula stop this server.");
         System.out.println("Test and prepare eula file.");
 
         Path eulaPath = Paths.get(controller.getConfig().getWorkDir(), EULA_FILE);
