@@ -16,6 +16,7 @@ public class Configuration {
     private static final String VERSION = "version";
     private static final String SUBVERSION = "subversion";
     private static final String TYPE = "type";
+    private static final String EULA = "eula";
 
     private final Map<String, String> source = new HashMap<>();
 
@@ -31,6 +32,7 @@ public class Configuration {
         put(VERSION, null);
         put(SUBVERSION, null);
         put(TYPE, "VANILLA");
+        put(EULA, "false");
     }
 
     public void initWithEnvironment() {
@@ -127,5 +129,11 @@ public class Configuration {
                 .filter(x -> x.name().equalsIgnoreCase(type))
                 .findFirst()
                 .orElse(Type.VANILLA);
+    }
+
+    public boolean getEula() {
+        String eula = source.get(EULA);
+
+        return Boolean.toString(true).equalsIgnoreCase(eula);
     }
 }
