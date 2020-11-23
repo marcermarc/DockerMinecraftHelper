@@ -37,7 +37,7 @@ public class Download extends BaseDownload {
 
         String subversion = controller.getConfig().getSubversion();
         if (subversion == null) {
-            String paperBuildVersions = Util.downloadString(PAPER_API_BUILD_URL.replace(BUILD_REPLACE, version));
+            String paperBuildVersions = Util.downloadString(PAPER_API_BUILD_URL.replace(VERSION_REPLACE, version));
             JSONObject paperBuildVersionsJson = new JSONObject(paperBuildVersions);
 
             subversion = paperBuildVersionsJson.getJSONObject("builds").getString("latest");
