@@ -18,6 +18,8 @@ public class Configuration {
     private static final String TYPE = "type";
     private static final String EULA = "eula";
 
+    private static final String LATEST = "latest";
+
     private final Map<String, String> source = new HashMap<>();
 
     public Configuration() {
@@ -115,7 +117,13 @@ public class Configuration {
     }
 
     public String getVersion() {
-        return source.get(VERSION);
+        String version = source.get(VERSION);
+
+        if (LATEST.equalsIgnoreCase(version)) {
+            return null;
+        }
+
+        return version;
     }
 
     public String getSubversion() {
