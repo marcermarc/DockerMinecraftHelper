@@ -3,6 +3,7 @@ package de.marcermarc.mchelper.download.paper;
 import de.marcermarc.mchelper.Controller;
 import de.marcermarc.mchelper.Util;
 import de.marcermarc.mchelper.download.BaseDownload;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.nio.file.Path;
@@ -11,9 +12,11 @@ import java.nio.file.Paths;
 public class Download extends BaseDownload {
     private static final String VERSION_REPLACE = "%version%";
     private static final String BUILD_REPLACE = "%build%";
-    private static final String PAPER_API_VERSIONS_URL = "https://papermc.io/api/v1/paper";
-    private static final String PAPER_API_BUILD_URL = "https://papermc.io/api/v1/paper/" + VERSION_REPLACE;
-    private static final String PAPER_API_DOWNLOAD_URL = "https://papermc.io/api/v1/paper/" + VERSION_REPLACE + "/" + BUILD_REPLACE + "/download";
+    private static final String DOWNLAOD_REPLACE = "%download%";
+    private static final String PAPER_API_VERSIONS_URL = "https://papermc.io/api/v2/projects/paper";
+    private static final String PAPER_API_BUILD_URL = "https://papermc.io/api/v2/projects/paper/versions/" + VERSION_REPLACE;
+    private static final String PAPER_API_BUILD_INFO_URL = "https://papermc.io/api/v2/projects/paper/versions/" + VERSION_REPLACE + "/builds/" + BUILD_REPLACE;
+    private static final String PAPER_API_DOWNLOAD_URL = "https://papermc.io/api/v2/projects/paper/versions/" + VERSION_REPLACE + "/builds/" + BUILD_REPLACE + "/downloads/" + DOWNLAOD_REPLACE;
 
     public Download(Controller controller) {
         super(controller);
@@ -32,7 +35,14 @@ public class Download extends BaseDownload {
             String paperApiVersions = Util.downloadString(PAPER_API_VERSIONS_URL);
             JSONObject paperApiVersionsJson = new JSONObject(paperApiVersions);
 
-            version = paperApiVersionsJson.getJSONArray("versions").getString(0);
+            JSONArray versions = paperApiVersionsJson.getJSONArray("versions");
+            for (int i = 0; i < versions.length(); i++) {
+                String v = versions.getString(i);
+
+                if (version == null || Util.compareVersions(v, version, "\\.") > 0) {
+                    version = v;
+                }
+            }
         }
 
         String subversion = controller.getConfig().getSubversion();
@@ -40,10 +50,15 @@ public class Download extends BaseDownload {
             String paperBuildVersions = Util.downloadString(PAPER_API_BUILD_URL.replace(VERSION_REPLACE, version));
             JSONObject paperBuildVersionsJson = new JSONObject(paperBuildVersions);
 
-            subversion = paperBuildVersionsJson.getJSONObject("builds").getString("latest");
+            JSONArray subversions = paperBuildVersionsJson.getJSONArray("builds");
+            subversion = Integer.toString(subversions.toList().stream().mapToInt(x -> (int) x).max().getAsInt());
         }
 
-        return PAPER_API_DOWNLOAD_URL.replace(VERSION_REPLACE, version).replace(BUILD_REPLACE, subversion);
+        String paperBuildInfo = Util.downloadString(PAPER_API_BUILD_INFO_URL.replace(VERSION_REPLACE, version).replace(BUILD_REPLACE, subversion));
+        JSONObject paperBuildInfoJson = new JSONObject(paperBuildInfo);
+        String downloadFilename = paperBuildInfoJson.getJSONObject("downloads").getJSONObject("application").getString("name");
+
+        return PAPER_API_DOWNLOAD_URL.replace(VERSION_REPLACE, version).replace(BUILD_REPLACE, subversion).replace(DOWNLAOD_REPLACE, downloadFilename);
     }
 
     @Override

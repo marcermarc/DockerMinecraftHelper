@@ -49,13 +49,19 @@ public class Download extends BaseDownload {
                 .start()
                 .waitFor(5, TimeUnit.MINUTES);
 
-        File[] files = FORGE_RESULT_PATH.toFile().listFiles((file, filename) -> filename.startsWith(FILE_START) && filename.endsWith(FILE_END));
+        File[] files = FORGE_RESULT_PATH.toFile().listFiles((file, filename) -> filename.endsWith(FILE_END));
 
-        if (files == null || files.length != 1) {
-            throw new Exception("Forge jar not found");
+        if (files == null || files.length < 1) {
+            throw new Exception("Jar not found");
         }
 
-        Files.move(files[0].toPath(), Paths.get(controller.getConfig().getMcDir(), controller.getConfig().getMcExec()));
+        for (File file : files) {
+            if (file.getName().startsWith(FILE_START)) {
+                Files.move(file.toPath(), Paths.get(controller.getConfig().getMcDir(), controller.getConfig().getMcExec()));
+            } else {
+                Files.move(file.toPath(), Paths.get(controller.getConfig().getMcDir(), file.getName()));
+            }
+        }
 
         // Move Forge libraries
         Files.move(Paths.get(FORGE_RESULT_PATH.toString(), LIBRARIES_FOLDER), Paths.get(controller.getConfig().getMcDir(), LIBRARIES_FOLDER));
