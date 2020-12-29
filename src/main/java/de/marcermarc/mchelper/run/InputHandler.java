@@ -24,7 +24,7 @@ public class InputHandler implements Runnable {
         Scanner inScanner = new Scanner(System.in);
         while (true) {
             try {
-                String in = inScanner.next(); // get the input and add the enter char
+                String in = inScanner.nextLine(); // get the input and add the enter char
 
                 System.out.println("Input recognized: '" + in + "'. Hand off to minecraft");
 

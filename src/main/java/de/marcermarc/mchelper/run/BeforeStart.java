@@ -52,7 +52,7 @@ public class BeforeStart {
         currentContent.add(0, "#This file was created/modified by the docker McHelper with using env variable 'eula'.");
         currentContent.add("eula=true");
 
-        Files.write(eulaPath, currentContent, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+        Files.write(eulaPath, currentContent, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
 
         System.out.println("Eula-file modified/created.");
     }
