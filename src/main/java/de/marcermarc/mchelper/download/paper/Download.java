@@ -39,6 +39,10 @@ public class Download extends BaseDownload {
             for (int i = 0; i < versions.length(); i++) {
                 String v = versions.getString(i);
 
+                if (v.contains("pre")) {
+                    continue; // don't use pre-versions
+                }
+
                 if (version == null || Util.compareVersions(v, version, "\\.") > 0) {
                     version = v;
                 }
