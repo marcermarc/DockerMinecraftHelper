@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="minecraft:jre11" type="docker-deploy" factoryName="dockerfile"
-                   server-name="Docker">
+    <configuration default="false" name="base:jre11" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
         <deployment type="dockerfile">
             <settings>
                 <option name="imageTag" value="marcermarc/minecraft:jre11"/>
