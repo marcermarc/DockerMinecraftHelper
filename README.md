@@ -1,8 +1,4 @@
-# WIP
-**This project isn't ready now.**
-
------
-Helper Tool for Minecraft Docker Images 
+Minecraft Docker Images with helper tool.
 
 The tool allows different options.
 
@@ -18,7 +14,7 @@ This tool is for docker-images. So the most parameters will be set via environme
 - WORKDIR: set the working directory from the game. Default: '/mnt/minecraft'
 - MCDIR: set the directory containing the executable. Default: '/opt/minecraft'
 - MXEXECUTABLE: set the file-name of the executable jar. Default depends on the type
-- MINRAM / MAXRAM: minimum and maximum ram usage. It is advisable to set it to the same value. Default: '4G'
+- MINRAM / MAXRAM: minimum and maximum ram usage. It is advisable to set it to the same value. Default: '6G'
 - TYPE: set the type of the server. Possible values:
   - BUKKIT
   - CRAFTBUKKIT
@@ -26,8 +22,9 @@ This tool is for docker-images. So the most parameters will be set via environme
   - FORGE (http://files.minecraftforge.net/)
   - PAPER (https://papermc.io/)
   - SPIGOT (https://www.spigotmc.org/)
-  - VANILLA 
-- COMMAND: set the execution command. Default: 'TODO' Within the command are different values replaced:
+  - VANILLA
+- COMMAND: set the execution command. Default is the command from Aikar (https://mcflags.emc.gs/). Within the command
+  are different values replaced:
   - %executable% -> the complete path to the executable (MCDIR + MCEXECUTABLE)
   - %minram% -> the value of MINRAM
   - %maxram% -> the value of MAXRAM
