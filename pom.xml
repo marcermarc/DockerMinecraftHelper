@@ -6,7 +6,7 @@
 
     <groupId>de.marcermarc</groupId>
     <artifactId>DockerMinecraftHelper</artifactId>
-    <version>0.1-BETA</version>
+    <version>1.0</version>
     <description>Helper Tool for Minecraft Docker Images</description>
 
     <properties>
@@ -58,6 +58,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20200518</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cronutils</groupId>
+            <artifactId>cron-utils</artifactId>
+            <version>9.1.5</version>
         </dependency>
     </dependencies>
 </project>

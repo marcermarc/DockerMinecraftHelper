@@ -1,12 +1,21 @@
 package de.marcermarc.mchelper.run;
 
+import com.cronutils.model.Cron;
+import com.cronutils.model.CronType;
+import com.cronutils.model.definition.CronDefinitionBuilder;
+import com.cronutils.model.time.ExecutionTime;
+import com.cronutils.parser.CronParser;
 import de.marcermarc.mchelper.Controller;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.util.Optional;
 import java.util.TimerTask;
 
 public class Restarter {
     private final Controller controller;
     private RestarterTask task = null;
+    private Cron cron = null;
 
     public Restarter(Controller controller) {
         this.controller = controller;
@@ -14,6 +23,47 @@ public class Restarter {
     }
 
     public void start() {
+        boolean started = testAndStartCron() || testAndStartInterval();
+    }
+
+    private boolean testAndStartCron() {
+        if (cron == null || !initCron()) {
+            return false;
+        }
+
+        ExecutionTime execTime = ExecutionTime.forCron(cron);
+
+        Optional<Duration> duration = execTime.timeToNextExecution(ZonedDateTime.now());
+
+        if (!duration.isPresent()) {
+            return false;
+        }
+
+        initTask(duration.get().toMillis());
+
+        return true;
+    }
+
+    private boolean initCron() {
+        String cronString = controller.getConfig().getRestartCron();
+
+        if (cronString == null || cronString.equals("")) {
+            return false;
+        }
+
+        try {
+            CronParser parser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.UNIX));
+
+            cron = parser.parse(cronString);
+            return true;
+        } catch (Exception ex) {
+            System.out.println("Cron could not be parsed");
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+
+    private boolean testAndStartInterval() {
         int interval = controller.getConfig().getRestartInterval();
 
         if (interval > 0) {
@@ -22,11 +72,16 @@ public class Restarter {
                 System.out.println("Restart-Task should be started but is already started.");
             }
 
-            long scheduleInterval = interval * 60L * 1000L; // scheduleInterval is in milliseconds.
+            initTask(interval * 60L * 1000L); // scheduleInterval is in milliseconds.
 
-            task = new RestarterTask(controller);
-            controller.getTimer().schedule(task, scheduleInterval, scheduleInterval);
+            return true;
         }
+        return false;
+    }
+
+    private void initTask(long scheduleInterval) {
+        task = new RestarterTask(controller);
+        controller.getTimer().schedule(task, scheduleInterval, scheduleInterval);
     }
 
     public void reset() {

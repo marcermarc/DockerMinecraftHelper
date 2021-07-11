@@ -28,9 +28,13 @@ This tool is for docker-images. So the most parameters will be set via environme
   - %executable% -> the complete path to the executable (MCDIR + MCEXECUTABLE)
   - %minram% -> the value of MINRAM
   - %maxram% -> the value of MAXRAM
-- RESTARTINTERVAL: Restarts the server in the given time in minutes. Default deactivated => no autorestart.
-- STOPTIMEOUT: A time in seconds. After a stop signal the programm waits max this time before hard killing minecraft. Default: 60
-- VERSION: The minecraft version to download. Defualt not set, so latest available will be used.
+- RESTARTCRON: Restarts the server with the defined cron. ([definition](https://www.unix.com/man-page/linux/5/crontab/))
+  Default deactivated => no auto restart.
+- RESTARTINTERVAL: Restarts the server in the given time in minutes. Only used when restart cron not active. Default
+  deactivated => no auto restart.
+- STOPTIMEOUT: A time in seconds. After a stop signal the program waits max this time before hard killing minecraft.
+  Default: 60
+- VERSION: The minecraft version to download. Default not set, so latest available will be used.
 - SUBVERSION: The specific version to download. Usable at following types:
   - FORGE: The forge version. E.g. '34.1.25'
   - FABRIC: The fabric version. E.g. '0.10.3+build.211'

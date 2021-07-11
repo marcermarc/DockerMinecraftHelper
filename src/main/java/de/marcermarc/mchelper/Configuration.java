@@ -22,6 +22,7 @@ public class Configuration {
     private static final String MIN_RAM = "minram";
     private static final String MAX_RAM = "maxram";
     private static final String RESTART_INTERVAL = "restartinterval";
+    private static final String RESTART_CRON = "restartcron";
     private static final String STOP_TIMEOUT = "stoptimeout";
     private static final String VERSION = "version";
     private static final String SUBVERSION = "subversion";
@@ -153,5 +154,9 @@ public class Configuration {
         String eula = source.get(EULA);
 
         return Boolean.toString(true).equalsIgnoreCase(eula);
+    }
+
+    public String getRestartCron() {
+        return source.get(RESTART_CRON);
     }
 }
