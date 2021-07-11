@@ -30,11 +30,15 @@ public class Restarter {
     }
 
     public void reset() {
+        destroy();
+
+        start();
+    }
+
+    public void destroy() {
         if (task != null && !task.isCanceled()) {
             task.cancel();
         }
-
-        start();
     }
 
     private static class RestarterTask extends TimerTask {

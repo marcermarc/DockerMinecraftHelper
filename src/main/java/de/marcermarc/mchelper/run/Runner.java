@@ -70,7 +70,7 @@ public class Runner {
         restartThread = new Thread(() -> {
             System.out.println("Restart process: Stop now.");
             stop();
-            System.out.println("Restart process: Stop was successfull, start now.");
+            System.out.println("Restart process: Stop was successful, start now.");
             start();
             restartTriggered = false;
         }, "Restart Thread");

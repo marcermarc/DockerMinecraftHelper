@@ -76,5 +76,6 @@ public class Main {
         runner.waitForFinish();
 
         hook.destroy();
+        restarter.destroy();
     }
 }
