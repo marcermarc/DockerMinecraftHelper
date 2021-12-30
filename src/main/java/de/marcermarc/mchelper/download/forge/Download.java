@@ -7,11 +7,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 public class Download extends BaseDownload {
     private static final String FORGE_META_URL = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/maven-metadata.json";
@@ -22,6 +25,8 @@ public class Download extends BaseDownload {
     private static final String FILE_START = "forge-";
     private static final String FILE_END = ".jar";
     private static final String LIBRARIES_FOLDER = "libraries";
+    private static final String UNIX_ARGS_FILENAME = "unix_args.txt";
+    private static final String ORIG_UNIX_AGRS_SUBPATH = LIBRARIES_FOLDER + "/net/minecraftforge/forge/" + VERSION_REPLACE + "/" + UNIX_ARGS_FILENAME;
 
     public Download(Controller controller) {
         super(controller);
@@ -51,10 +56,6 @@ public class Download extends BaseDownload {
 
         File[] files = FORGE_RESULT_PATH.toFile().listFiles((file, filename) -> filename.endsWith(FILE_END));
 
-        if (files == null || files.length < 1) {
-            throw new Exception("Jar not found");
-        }
-
         for (File file : files) {
             if (file.getName().startsWith(FILE_START)) {
                 Files.move(file.toPath(), Paths.get(controller.getConfig().getMcDir(), controller.getConfig().getMcExec()));
@@ -65,6 +66,8 @@ public class Download extends BaseDownload {
 
         // Move Forge libraries
         Files.move(Paths.get(FORGE_RESULT_PATH.toString(), LIBRARIES_FOLDER), Paths.get(controller.getConfig().getMcDir(), LIBRARIES_FOLDER));
+
+        writeArgsFile(version);
     }
 
     private String getVersion() throws Exception {
@@ -105,6 +108,23 @@ public class Download extends BaseDownload {
         }
 
         return subversion;
+    }
+
+    private void writeArgsFile(String version) throws IOException {
+        Path origFilePath = Paths.get(controller.getConfig().getMcDir(), ORIG_UNIX_AGRS_SUBPATH.replace(VERSION_REPLACE, version));
+
+        // old forge version don't use this method
+        if (Files.exists(origFilePath)) {
+            String absoluteLibariesPath = Paths.get(controller.getConfig().getMcDir(), LIBRARIES_FOLDER).toString();
+            Path newFilePath = Paths.get(controller.getConfig().getMcDir(), UNIX_ARGS_FILENAME);
+
+            try (Stream<String> stream = Files.lines(origFilePath)) {
+                Files.write(
+                        newFilePath,
+                        (Iterable<String>) stream.map(x -> x.replace(LIBRARIES_FOLDER, absoluteLibariesPath))::iterator,
+                        StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+            }
+        }
     }
 
     @Override

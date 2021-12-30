@@ -23,11 +23,10 @@ This tool is for docker-images. So the most parameters will be set via environme
   - PAPER (https://papermc.io/)
   - SPIGOT (https://www.spigotmc.org/)
   - VANILLA
-- COMMAND: set the execution command. Default is the command from Aikar (https://mcflags.emc.gs/). Within the command
-  are different values replaced:
-  - %executable% -> the complete path to the executable (MCDIR + MCEXECUTABLE)
-  - %minram% -> the value of MINRAM
-  - %maxram% -> the value of MAXRAM
+- JVMARGS: The args for the jvm. Default the args from [Aikar](https://mcflags.emc.gs/) are used.
+- MCSTARTARGS: The args for starting minecraft. By default, this is filled to match the type. For example, "-jar
+  minecraft-server.jar".
+- MCARGS: The programm args. By default "nogui".
 - RESTARTCRON: Restarts the server with the defined cron. ([definition](https://www.unix.com/man-page/linux/5/crontab/))
   Default deactivated => no auto restart.
 - RESTARTINTERVAL: Restarts the server in the given time in minutes. Only used when restart cron not active. Default
@@ -39,3 +38,10 @@ This tool is for docker-images. So the most parameters will be set via environme
   - FORGE: The forge version. E.g. '34.1.25'
   - FABRIC: The fabric version. E.g. '0.10.3+build.211'
   - PAPER: The paper build number. E.g. '208'
+
+Old parameters that should no longer be used. These still exist for downward compatibility.
+
+- COMMAND: set the execution command. Within the command are different values replaced:
+  - %executable% -> the complete path to the executable (MCDIR + MCEXECUTABLE)
+  - %minram% -> the value of MINRAM
+  - %maxram% -> the value of MAXRAM

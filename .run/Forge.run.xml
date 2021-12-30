@@ -3,13 +3,12 @@
         <deployment type="dockerfile">
             <settings>
                 <option name="imageTag" value="marcermarc/minecraft:forge-latest"/>
-                <option name="buildCliOptions" value=""/>
                 <option name="buildOnly" value="true"/>
                 <option name="command" value=""/>
                 <option name="containerName" value="mc_forge"/>
                 <option name="entrypoint" value=""/>
                 <option name="commandLineOptions" value=""/>
-                <option name="sourceFilePath" value="Dockerfiles/Forge/jre11.Dockerfile"/>
+                <option name="sourceFilePath" value="Dockerfiles/Forge/jre17.Dockerfile"/>
             </settings>
         </deployment>
         <method v="2"/>

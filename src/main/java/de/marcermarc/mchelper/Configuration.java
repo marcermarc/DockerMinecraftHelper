@@ -5,15 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Configuration {
-    private static final String AIKAR_COMMAND = // source: https://mcflags.emc.gs/
-            "java -Xms%minram% -Xmx%maxram% -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 " +
-                    "-XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch " +
-                    "-XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M " +
-                    "-XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 " +
-                    "-XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 " +
-                    "-XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem " +
-                    "-XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true " +
-                    "-jar %executable% nogui";
+    private static final String AIKAR_ARGS = // source: https://mcflags.emc.gs/
+            "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions " +
+                    "-XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 " +
+                    "-XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 " +
+                    "-XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 " +
+                    "-XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 " +
+                    "-XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 " +
+                    "-Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true";
 
     private static final String WORK_DIR = "workdir";
     private static final String MC_DIR = "mcdir";
@@ -28,6 +27,9 @@ public class Configuration {
     private static final String SUBVERSION = "subversion";
     private static final String TYPE = "type";
     private static final String EULA = "eula";
+    private static final String JVM_ARGS = "jvmargs";
+    private static final String MC_START_ARGS = "mcstartargs";
+    private static final String MC_PROGRAM_ARGS = "mcargs";
 
     private static final String LATEST = "latest";
 
@@ -37,7 +39,10 @@ public class Configuration {
         put(WORK_DIR, "/mnt/minecraft");
         put(MC_DIR, "/opt/minecraft");
         put(MC_EXEC, null);
-        put(COMMAND, AIKAR_COMMAND);
+        put(COMMAND, null); // Replaced with JVM_ARGS, MC_START_ARGS and MC_PROGRAM_ARGS
+        put(JVM_ARGS, AIKAR_ARGS);
+        put(MC_START_ARGS, "-jar %executable%");
+        put(MC_PROGRAM_ARGS, "nogui");
         put(MIN_RAM, "6G");
         put(MAX_RAM, "6G");
         put(RESTART_INTERVAL, "-1");
@@ -91,6 +96,22 @@ public class Configuration {
 
     public String getCommand() {
         return source.get(COMMAND);
+    }
+
+    public String getJvmArgs() {
+        return source.get(JVM_ARGS);
+    }
+
+    public String getMcStartArgs() {
+        return source.get(MC_START_ARGS);
+    }
+
+    public void setMcStartArgs(String value) {
+        source.put(MC_START_ARGS, value);
+    }
+
+    public String getMcProgramArgs() {
+        return source.get(MC_PROGRAM_ARGS);
     }
 
     public String getMinRam() {

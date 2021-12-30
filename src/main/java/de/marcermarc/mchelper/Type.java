@@ -43,6 +43,8 @@ public enum Type {
         switch (this) {
             case FABRIC:
                 return new de.marcermarc.mchelper.run.fabric.BeforeStart(controller);
+            case FORGE:
+                return new de.marcermarc.mchelper.run.forge.BeforeStart(controller);
 
         }
         return new BeforeStart(controller);
