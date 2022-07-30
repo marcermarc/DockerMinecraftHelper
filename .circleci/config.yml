@@ -5,8 +5,8 @@ orbs:
 
 jobs:
   build-base:
-    docker:
-      - image: cimg/deploy:2022.07
+    machine:
+      image: ubuntu-2204:current
     resource_class: <<parameters.resource>>
     parallelism: 5
     parameters:
@@ -26,8 +26,8 @@ jobs:
           image: marcermarc/minecraft
           tag: <<parameters.tag>>
   build-specific:
-    docker:
-      - image: cimg/deploy:2022.07
+    machine:
+      image: ubuntu-2204:current
     resource_class: <<parameters.resource>>
     parallelism: 5
     parameters:
