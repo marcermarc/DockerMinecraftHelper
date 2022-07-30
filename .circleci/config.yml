@@ -6,7 +6,7 @@ orbs:
 jobs:
   build-base:
     machine:
-      image: ubuntu-2204:current
+      image: ubuntu-2004:current
     resource_class: <<parameters.resource>>
     parallelism: 5
     parameters:
@@ -27,7 +27,7 @@ jobs:
           tag: <<parameters.tag>>
   build-specific:
     machine:
-      image: ubuntu-2204:current
+      image: ubuntu-2004:current
     resource_class: <<parameters.resource>>
     parallelism: 5
     parameters:
@@ -65,7 +65,7 @@ workflows:
           name: forge-<<matrix.version>>-<<matrix.resource>>
           requires:
             - base-jre17-<<matrix.resource>>
-          mc_type: forge
+          mc_type: Forge
           baseimage: jre17
           matrix:
             parameters:
