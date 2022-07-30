@@ -6,7 +6,7 @@ orbs:
 jobs:
   build-base:
     docker:
-      - image: cimg/base:current
+      - image: cimg/deploy:2022.07
     resource_class: <<parameters.resource>>
     parallelism: 5
     parameters:
@@ -27,7 +27,7 @@ jobs:
           tag: <<parameters.tag>>
   build-specific:
     docker:
-      - image: cimg/base:current
+      - image: cimg/deploy:2022.07
     resource_class: <<parameters.resource>>
     parallelism: 5
     parameters:
