@@ -21,7 +21,7 @@ jobs:
       - docker/build:
           image: marcermarc/minecraft 
           tag: <<parameters.tag>>
-          dockerfile: Dockerfiles/Base/<<parameters.tag>>.Dockerfile 
+          dockerfile: Dockerfiles/base/<<parameters.tag>>.Dockerfile 
       - docker/push:
           image: marcermarc/minecraft
           tag: <<parameters.tag>>
