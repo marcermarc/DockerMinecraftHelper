@@ -8,6 +8,7 @@ jobs:
     docker:
       - image: cimg/base:current
     resource_class: <<parameters.resource>>
+    parallelism: 999
     parameters:
       tag:
         type: string
@@ -28,6 +29,7 @@ jobs:
     docker:
       - image: cimg/base:current
     resource_class: <<parameters.resource>>
+    parallelism: 999
     parameters:
       version:
         type: string
@@ -54,12 +56,15 @@ workflows:
   minecraft:
     jobs:
       - build-base:
+          name: base-<<matrix.tag>>-<<matrix.resource>>
           matrix:
             parameters:
               tag: [jre8, jre11, jre17, jdk8, jdk11, jdk17]
               resource: [arm.medium, medium]
       - build-specific:
-          name: build-forge-jre17
+          name: forge-<<matrix.version>>-<<matrix.resource>>
+          requires:
+            - base-jre17-<<matrix.resource>>
           mc_type: forge
           baseimage: jre17
           matrix:
