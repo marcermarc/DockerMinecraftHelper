@@ -1,26 +1,71 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+orbs:
+  docker: circleci/docker@2.1.2
+
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  build-base:
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: cimg/base:current
+    resource_class: <<parameters.resource>>
+    parameters:
+      tag:
+        type: string
+      resource:
+        type: string
     steps:
       - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+      - docker/install-docker
+      - docker/check
+      - docker/build:
+          image: marcermarc/minecraft 
+          tag: <<parameters.tag>>
+          dockerfile: Dockerfiles/Base/<<parameters.tag>>.Dockerfile 
+      - docker/push:
+          image: marcermarc/minecraft
+          tag: <<parameters.tag>>
+  build-specific:
+    docker:
+      - image: cimg/base:current
+    resource_class: <<parameters.resource>>
+    parameters:
+      version:
+        type: string
+      mc_type:
+        type: string
+      baseimage:
+        type: string
+      resource:
+        type: string
+    steps:
+      - checkout
+      - docker/install-docker
+      - docker/check
+      - docker/build:
+          image: marcermarc/minecraft
+          tag: <<parameters.mc_type>>_<<parameters.version>>
+          dockerfile: Dockerfiles/<<parameters.mc_type>>/<<parameters.baseimage>>.Dockerfile
+          extra_build_args: '--build-arg VERSION=<<parameters.version>>'
+      - docker/push:
+          image: marcermarc/minecraft
+          tag: <<parameters.mc_type>>_<<parameters.version>>
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  minecraft:
     jobs:
-      - say-hello
+      - build-base:
+          matrix:
+            parameters:
+              tag: [jre8, jre11, jre17, jdk8, jdk11, jdk17]
+              resource: [arm.medium, medium]
+      - build-specific:
+          name: build-forge-jre17
+          mc_type: forge
+          baseimage: jre17
+          matrix:
+            parameters:
+              resource: [arm.medium, medium]
+              version: [latest, '1.19.1', '1.19', '1.18.2', '1.17.1']
+
+        
+ 
