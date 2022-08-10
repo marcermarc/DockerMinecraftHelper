@@ -69,5 +69,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: marcermarc/minecraft:${{ matrix.type }}_${{ matrix.version }}
-          build-ars:
-            VERSION: ${{ matrix.version }}
+          build-ars: |
+            VERSION:=${{ matrix.version }}
