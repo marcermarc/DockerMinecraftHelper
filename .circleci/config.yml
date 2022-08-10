@@ -69,6 +69,3 @@ workflows:
               resource: [arm.medium, medium]
               #version: [latest, '1.19.1', '1.19', '1.18.2', '1.17.1']
               version: [latest]
-
-        
- 
