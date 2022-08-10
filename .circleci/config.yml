@@ -55,7 +55,8 @@ workflows:
           name: base-<<matrix.tag>>-<<matrix.resource>>
           matrix:
             parameters:
-              tag: [jre8, jre11, jre17, jdk8, jdk11, jdk17]
+              #tag: [jre8, jre11, jre17, jdk8, jdk11, jdk17]
+              tag: [jre17]
               resource: [arm.medium, medium]
       - build-specific:
           name: forge-<<matrix.version>>-<<matrix.resource>>
@@ -66,7 +67,8 @@ workflows:
           matrix:
             parameters:
               resource: [arm.medium, medium]
-              version: [latest, '1.19.1', '1.19', '1.18.2', '1.17.1']
+              #version: [latest, '1.19.1', '1.19', '1.18.2', '1.17.1']
+              version: [latest]
 
         
  
