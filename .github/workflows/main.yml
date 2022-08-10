@@ -1,0 +1,73 @@
+name: 'build all'
+
+on:
+  schedule:
+    - cron: '0 3 * * 3'
+
+  workflow_dispatch:
+
+jobs:
+  build-base:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag: [jre8, jre11, jre17, jdk8, jdk11, jdk17]
+    steps:
+      - 
+        name: checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          file: Dockerfiles/base/${{ matrix.tag }}.Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: marcermarc/minecraft:${{ matrix.tag }}
+  build-versions:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # vanilla
+          - baseimage: jre17
+            version: '1.19.2'
+            type: vanilla
+    steps:
+      - 
+        name: checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          file: Dockerfiles/${{ matrix.type }}/${{ matrix.baseimage }}.Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: marcermarc/minecraft:${{ matrix.type }}_${{ matrix.version }}
+          build-ars:
+            VERSION: ${{ matrix.version }}
