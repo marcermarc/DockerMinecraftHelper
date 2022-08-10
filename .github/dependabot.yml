@@ -10,3 +10,8 @@ updates:
     directory: "/Dockerfiles/"
     schedule:
       interval: "weekly"
+
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
