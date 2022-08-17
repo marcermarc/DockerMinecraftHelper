@@ -137,7 +137,7 @@ jobs:
           push: true
           tags: marcermarc/minecraft:${{ matrix.type }}_${{ matrix.version }}
           build-args: |
-            VERSION:=${{ matrix.version }}
+            VERSION=${{ matrix.version }}
       -
         if: matrix.type == 'vanilla'
         name: Build and push
@@ -148,4 +148,4 @@ jobs:
           push: true
           tags: marcermarc/minecraft:${{ matrix.type }}_${{ matrix.version }},marcermarc/minecraft:${{ matrix.version }}
           build-args: |
-            VERSION:=${{ matrix.version }}
+            VERSION=${{ matrix.version }}
