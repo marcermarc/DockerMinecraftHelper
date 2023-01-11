@@ -9,7 +9,7 @@ RUN apk add --update --no-cache openjdk11 maven --repository=http://dl-cdn.alpin
  && mvn compile package
 
 
-FROM alpine:latest
+FROM azul/zulu-openjdk-alpine:11-latest
 
 LABEL maintainer="docker@marcermarc.de"
 
@@ -17,8 +17,7 @@ WORKDIR /opt
 
 COPY --from=builder /opt/target/McDockerHelper.jar .
 
-RUN apk add --update --no-cache openjdk11 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community \
- && mkdir -p /opt/minecraft \
+RUN mkdir -p /opt/minecraft \
  && mkdir -p /mnt/minecraft
 
 EXPOSE 25565:25565/tcp 25565:25565/udp
