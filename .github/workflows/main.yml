@@ -32,7 +32,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           file: Dockerfiles/base/${{ matrix.tag }}.Dockerfile
           platforms: linux/amd64,linux/arm64
@@ -136,7 +136,7 @@ jobs:
       -
         if: matrix.type != 'vanilla'
         name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           file: Dockerfiles/${{ matrix.type }}/${{ matrix.baseimage }}.Dockerfile
           platforms: linux/amd64,linux/arm64
@@ -147,7 +147,7 @@ jobs:
       -
         if: matrix.type == 'vanilla'
         name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           file: Dockerfiles/${{ matrix.type }}/${{ matrix.baseimage }}.Dockerfile
           platforms: linux/amd64,linux/arm64
